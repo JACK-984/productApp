@@ -1,0 +1,124 @@
+package com.example.sqlite3_project;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+    static final String DATABASE = "product.db";
+    static final int DB_VERSION = 5;
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS user (userID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, phone INTEGER, password TEXT, userImage BLOB)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS products (productID INTEGER PRIMARY KEY AUTOINCREMENT, productName TEXT, price REAL,inStock BOOLEAN,quantity INTEGER, description TEXT, categoryID INTEGER, adminID INTEGER,productImage BLOB, FOREIGN KEY (adminID) REFERENCES admin(adminID), FOREIGN KEY (categoryID) REFERENCES categories(categoryID))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS categories (categoryID INTEGER PRIMARY KEY AUTOINCREMENT, categoryName TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS admin (adminID INTEGER PRIMARY KEY AUTOINCREMENT, admin_username TEXT, admin_email TEXT, admin_pw TEXT)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS user");
+        db.execSQL("DROP TABLE IF EXISTS products");
+        db.execSQL("DROP TABLE IF EXISTS categories");
+        onCreate(db);
+    }
+    public List<Category> getCategories() {
+        List<Category> categories = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            // Query to fetch categories from the database
+            String query = "SELECT * FROM categories";
+            cursor = db.rawQuery(query, null);
+
+            // Iterate through the cursor and add categories to the list
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int categoryId = cursor.getInt(cursor.getColumnIndex("categoryID"));
+                    String categoryName = cursor.getString(cursor.getColumnIndex("categoryName"));
+
+                    // Create a Category object and add it to the list
+                    Category category = new Category(categoryId, categoryName);
+                    categories.add(category);
+
+                    // Log the retrieved category
+//                    Log.d("CategoryDebug", "Category ID: " + categoryId + ", Name: " + categoryName);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            // Close the cursor and database
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+        return categories;
+    }
+
+    // Method to log data from the 'user' table
+    public void logUserData() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM user", null);
+        logDataFromCursor(cursor);
+    }
+    public void deleteProduct(String productId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("products", "productID = ?", new String[]{productId});
+        db.close();
+    }
+    // Method to log data from the 'products' table
+//    public void logProductData() {
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = db.rawQuery("SELECT * FROM products", null);
+//        logDataFromCursor(cursor);
+//    }
+
+    // Method to log data from the 'categories' table
+    public void logCategoryData() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM categories", null);
+        logDataFromCursor(cursor);
+    }
+    public void logProductData() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT productID, productName, description, price, categoryID,inStock,quantity FROM products", null);
+        logDataFromCursor(cursor);
+    }
+    // Method to log data from the 'admin' table
+    public void logAdminData() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM admin", null);
+        logDataFromCursor(cursor);
+    }
+
+    // Helper method to log data from a cursor
+    private void logDataFromCursor(Cursor cursor) {
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
+                        stringBuilder.append(cursor.getColumnName(i)).append(": ").append(cursor.getString(i)).append(", ");
+                    }
+                    Log.d("DatabaseDebug", stringBuilder.toString());
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+    }
+}

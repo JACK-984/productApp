@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group_main">
+        <item
+            android:id="@+id/viewProduct"
+            android:title="View Product"
+            android:visible="false" />
+        <item
+            android:id="@+id/manageProduct"
+            android:title="Manage Product" />
+        <item
+            android:id="@+id/uploadProduct"
+            android:title="Upload Product" />
+        <item
+            android:id="@+id/sign_out"
+            android:title="Sign out" />
+    </group>
+    <!-- Add more items as needed -->
+</menu>
