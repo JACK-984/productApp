@@ -20,8 +20,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
         categoryList.addAll(newCategories); // Add new categories
         notifyDataSetChanged(); // Notify the adapter that the dataset has changed
     }
-
-
     public CategoryAdapter(List<Category> categoryList, OnCategoryClickListener listener) {
         this.categoryList = categoryList;
         this.listener = listener;

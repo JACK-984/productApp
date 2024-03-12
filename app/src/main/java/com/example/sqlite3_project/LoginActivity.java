@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         switchBtn = findViewById(R.id.switchBtn);
         userName = findViewById(R.id.userLogin);
         inputPassword = findViewById(R.id.passwordLogin);

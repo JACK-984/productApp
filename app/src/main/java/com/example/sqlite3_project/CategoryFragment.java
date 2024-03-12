@@ -68,15 +68,37 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         adapter = new ProductAdapter(getContext(),productList, this);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
-
         if (categoryName != null) {
             loadProductsForCategory(categoryName, adminID);
         }
-
         return view;
     }
+    public void loadProductsForCategory(String categoryName) {
 
-    private void loadProductsForCategory(String categoryName, String adminID) {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM products WHERE categoryID = (SELECT categoryID FROM categories WHERE categoryName = ?)", new String[]{categoryName});
+            if (cursor.moveToFirst()) {
+                do {
+                    Product product = new Product(
+                            cursor.getString(cursor.getColumnIndex("productID")),
+                            cursor.getString(cursor.getColumnIndex("description")),
+                            cursor.getBlob(cursor.getColumnIndex("productImage")),
+                            cursor.getString(cursor.getColumnIndex("productName")),
+                            cursor.getDouble(cursor.getColumnIndex("price")),
+                            cursor.getString(cursor.getColumnIndex("adminID")),
+                            cursor.getInt(cursor.getColumnIndex("categoryID")),
+                            cursor.getInt(cursor.getColumnIndex("inStock")) == 1,
+                            cursor.getInt(cursor.getColumnIndex("quantity"))
+                    );
+                    productList.add(product);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            adapter.notifyDataSetChanged();
+
+    }
+    public void loadProductsForCategory(String categoryName, String adminID) {
         if (categoryName.equals("All")) {
             loadAllProducts(adminID);
         } else {
@@ -116,7 +138,9 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         // Notify the adapter that the data has changed
         adapter.notifyDataSetChanged();
     }
-
+    private void setProductList(Product product){
+        productList.add(product);
+    }
     private void loadAllProducts(String adminID) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM products WHERE adminID = ?", new String[]{adminID});

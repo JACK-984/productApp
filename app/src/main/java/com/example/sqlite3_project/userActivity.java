@@ -7,6 +7,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,26 +16,87 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class userActivity extends AppCompatActivity {
+public class userActivity extends AppCompatActivity implements CategoryAdapter.OnCategoryClickListener{
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    CategoryAdapter categoryAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         Toast.makeText(this,"userID " + getIntent().getExtras().getString("userID"),Toast.LENGTH_SHORT).show();
         Toast.makeText(this,"userRole " + getIntent().getExtras().getString("userType"),Toast.LENGTH_SHORT).show();
-
+        String userID = getIntent().getExtras().getString("userID");
+        String userType =  getIntent().getExtras().getString("userType");
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         toolbar = findViewById(R.id.topAppBar);
+        CategoryFragment categoryFragment = new CategoryFragment();
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        List<Category> categories = dbHelper.getCategories();
 
+        // Create a ViewPager
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),1);
+        categoryAdapter = new CategoryAdapter(categories,this);
+// Iterate over the categories and add tabs to the TabLayout
+        for (Category category : categories) {
+            TabLayout.Tab tab = tabLayout.newTab();
+            tab.setText(category.getName()); // Assuming getName() returns the name of the category
+            tabLayout.addTab(tab);
+
+            // Add a corresponding fragment to the ViewPager
+            pagerAdapter.addFragment(CategoryFragment.newInstance(category.getName(), userID, categoryAdapter),category.getName());
+        }
+// Set up the ViewPager with the adapter
+        viewPager.setAdapter(pagerAdapter);
+
+// Connect the TabLayout and ViewPager
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                String categoryName = categories.get(position).getName();
+// Remove previous fragment if it exists
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                Fragment existingFragment = fragmentManager.findFragmentByTag("category_" + categoryName);
+                if (existingFragment != null) {
+                    transaction.remove(existingFragment);
+                }
+                // Add new fragment
+                transaction.add(R.id.viewPager, CategoryFragment.newInstance(categoryName, userID, categoryAdapter), "category_" + categoryName);
+                transaction.commit();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +108,6 @@ public class userActivity extends AppCompatActivity {
                 }
             }
         });
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -63,7 +125,7 @@ public class userActivity extends AppCompatActivity {
             }
         });
     }
-
+    // METHODS
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar, menu);
@@ -76,7 +138,6 @@ public class userActivity extends AppCompatActivity {
                 return true; // Return true to indicate that the event has been consumed
             }
         });
-
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("Type to Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -91,5 +152,9 @@ public class userActivity extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public void onCategoryClick(String categoryName) {
+
     }
 }

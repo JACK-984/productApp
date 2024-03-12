@@ -84,13 +84,6 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         List<Category> categories = dbHelper.getCategories();
         categoryAdapter.loadCategoriesFromDatabase(categories);
-
-//        refresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                categoryFragment.refreshProductList();
-//            }
-//        });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,9 +95,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
                 }
             }
         });
-
         // changing categories button
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

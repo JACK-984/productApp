@@ -45,7 +45,6 @@ import android.widget.Toast;
 
 public class adminProductDetail extends AppCompatActivity {
     ArrayAdapter<String> adapter;
-
     private EditText productNameEditText;
     ArrayAdapter<String> spinnerAdapter;
     private EditText productPriceEditText;
@@ -222,9 +221,6 @@ public class adminProductDetail extends AppCompatActivity {
             return false;
         }
     }
-
-
-
     private void loadProductDetails(String productID) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM products WHERE productID = ?", new String[]{productID});

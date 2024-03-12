@@ -14,19 +14,26 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     private List<Product> productList;
     private OnProductClickListener listener;
     private Context context;
+    private String userType;
     public ProductAdapter(Context context,List<Product> productList, OnProductClickListener listener) {
         this.context = context;
         this.productList = productList;
         this.listener = listener;
     }
+
     public void filterList(List<Product> filteredList) {
         productList = filteredList;
         notifyDataSetChanged();
     }
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout, parent, false);
-        return new ProductViewHolder(view, this);
+//        if(userType == "customer"){
+//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout_user, parent, false);
+//            return new ProductViewHolder(view, this);
+//        }
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout, parent, false);
+            return new ProductViewHolder(view, this);
+
     }
 
     @Override
