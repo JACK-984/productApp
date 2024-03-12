@@ -15,25 +15,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     private OnProductClickListener listener;
     private Context context;
     private String userType;
-    public ProductAdapter(Context context,List<Product> productList, OnProductClickListener listener) {
+    public ProductAdapter(Context context,List<Product> productList, OnProductClickListener listener, String userType) {
         this.context = context;
         this.productList = productList;
         this.listener = listener;
+        this.userType = userType;
     }
-
+    public String getUserType(){
+        return userType;
+    }
     public void filterList(List<Product> filteredList) {
         productList = filteredList;
         notifyDataSetChanged();
     }
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        if(userType == "customer"){
-//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout_user, parent, false);
-//            return new ProductViewHolder(view, this);
-//        }
+        if(userType.equals("admin")){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout, parent, false);
             return new ProductViewHolder(view, this);
-
+        }else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout_user, parent, false);
+            return new ProductViewHolder(view, this);
+        }
     }
 
     @Override

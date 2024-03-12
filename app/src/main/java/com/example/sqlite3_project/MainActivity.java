@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
         return super.onCreateOptionsMenu(menu);
     }
     private void loadCategoryFragment(String initialCategoryName) {
-        categoryFragment = CategoryFragment.newInstance(initialCategoryName, userID, categoryAdapter);
+        categoryFragment = CategoryFragment.newInstance(initialCategoryName, userID, categoryAdapter,userType);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.productFragment, categoryFragment)
                 .commit();
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
             // Update the categoryName variable with the clicked category name
             String categoryNAME = categoryName;
             // Update the CategoryFragment with the new category name
-            categoryFragment = CategoryFragment.newInstance(categoryNAME, userID,categoryAdapter);
+            categoryFragment = CategoryFragment.newInstance(categoryNAME, userID,categoryAdapter,userType);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.productFragment, categoryFragment)
                     .commit();

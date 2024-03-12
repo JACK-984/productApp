@@ -26,7 +26,10 @@ public class ProductViewHolder extends RecyclerView.ViewHolder{
         productImageView = itemView.findViewById(R.id.productImage);
         productNameTextView = itemView.findViewById(R.id.productName);
         productPriceTextView = itemView.findViewById(R.id.productPrice);
-//        deleteButton = itemView.findViewById(R.id.deleteButton);
+        // Determine whether to show or hide deleteButton based on userType
+        if ("admin".equals(adapter.getUserType())) {
+            deleteButton = itemView.findViewById(R.id.deleteButton);
+        }
     }
     public void bind(Product product) {
         // Bind data to views
@@ -39,16 +42,18 @@ public class ProductViewHolder extends RecyclerView.ViewHolder{
             // Log the error or handle it appropriately
             e.printStackTrace();
         }
-//        deleteButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int position = getAdapterPosition();
-//                if (position != RecyclerView.NO_POSITION) {
-//                    // Call deleteProduct method of ProductAdapter
-//                    adapter.deleteProduct(position);
-//                }
-//            }
-//        });
+        if ("admin".equals(adapter.getUserType())) {
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        // Call deleteProduct method of ProductAdapter
+                        adapter.deleteProduct(position);
+                    }
+                }
+            });
+        }
         productNameTextView.setText(product.getName());
         productPriceTextView.setText(String.valueOf(product.getPrice() + " $"));
     }

@@ -63,7 +63,7 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
             tabLayout.addTab(tab);
 
             // Add a corresponding fragment to the ViewPager
-            pagerAdapter.addFragment(CategoryFragment.newInstance(category.getName(), userID, categoryAdapter),category.getName());
+            pagerAdapter.addFragment(CategoryFragment.newInstance(category.getName(), userID, categoryAdapter,userType),category.getName());
         }
 // Set up the ViewPager with the adapter
         viewPager.setAdapter(pagerAdapter);
@@ -83,7 +83,7 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
                     transaction.remove(existingFragment);
                 }
                 // Add new fragment
-                transaction.add(R.id.viewPager, CategoryFragment.newInstance(categoryName, userID, categoryAdapter), "category_" + categoryName);
+                transaction.add(R.id.viewPager, CategoryFragment.newInstance(categoryName, userID, categoryAdapter,userType), "category_" + categoryName);
                 transaction.commit();
             }
 

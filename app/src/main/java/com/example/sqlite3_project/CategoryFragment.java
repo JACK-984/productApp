@@ -37,11 +37,12 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
 
     static final int UPLOAD_PRODUCT_REQUEST_CODE = 1;
 
-    public static CategoryFragment newInstance(String categoryName, String adminID, CategoryAdapter categoryAdapter) {
+    public static CategoryFragment newInstance(String categoryName, String adminID, CategoryAdapter categoryAdapter, String userType) {
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
         args.putString("categoryName", categoryName);
         args.putString("adminID", adminID); // Add adminID to the arguments
+        args.putString("userType", userType);
         fragment.setArguments(args);
         fragment.setCategoryAdapter(categoryAdapter); // Set the category adapter
         return fragment;
@@ -65,7 +66,8 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         View view = inflater.inflate(R.layout.category_fragment, container, false);
         productList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.productList);
-        adapter = new ProductAdapter(getContext(),productList, this);
+        String userType = getArguments().getString("userType");
+        adapter = new ProductAdapter(getContext(),productList, this,userType);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
         if (categoryName != null) {
