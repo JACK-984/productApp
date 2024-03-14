@@ -56,7 +56,6 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
         ViewPager viewPager = findViewById(R.id.viewPager);
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),1);
         categoryAdapter = new CategoryAdapter(categories,this);
-// Iterate over the categories and add tabs to the TabLayout
         for (Category category : categories) {
             TabLayout.Tab tab = tabLayout.newTab();
             tab.setText(category.getName()); // Assuming getName() returns the name of the category
@@ -147,11 +146,21 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                return false;
+                searchProducts(newText);
+                return true;
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+    private void searchProducts(String searchText) {
+        // 1. Get the currently active CategoryFragment
+        Log.d("SearchQuery", "Search query: " + searchText);
+        TabLayout.Tab currentTab = tabLayout.getTabAt(tabLayout.getSelectedTabPosition());
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag("category_" + currentTab.getText());
+
+        if (currentFragment instanceof CategoryFragment) {
+            ((CategoryFragment) currentFragment).filterProducts(searchText);
+        }
     }
     @Override
     public void onCategoryClick(String categoryName) {

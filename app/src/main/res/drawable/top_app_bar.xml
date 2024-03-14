@@ -3,14 +3,13 @@
 
     <item
         android:id="@+id/edit"
-        android:icon="@drawable/shopping_cart_black_24dp"
+        android:icon="@drawable/shopping_cart_24dp"
         app:showAsAction="ifRoom"
-        android:title="Shopping Cart" />
+        android:title="Shopping Cart"/>
     <item
         android:id="@+id/searchIcon"
         android:icon="@drawable/search"
         app:showAsAction="ifRoom|collapseActionView"
         android:title="Search"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
-
 </menu>

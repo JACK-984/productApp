@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".userActivity"
     android:orientation="vertical"
-    android:id="@+id/drawerLayout">
+    android:id="@+id/drawerLayout"
+    android:background="@color/white">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,17 +26,25 @@
                     android:minHeight="?attr/actionBarSize"
                     app:menu="@menu/user_bar"
                     app:navigationIcon="@drawable/menu_black_24dp"
-                    app:title="ProductApp" />
+                    app:title="ProductApp"
+                    app:titleTextColor="@color/white"
+                    android:background="@color/black"
+                    />
             </com.google.android.material.appbar.AppBarLayout>
         </LinearLayout>
         <!-- UI is here -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            app:tabTextColor="@color/white"
+
+            app:tabIndicatorColor="@color/white">
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:text="Tab 1"
                 />
             <com.google.android.material.tabs.TabItem

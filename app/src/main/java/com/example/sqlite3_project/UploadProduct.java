@@ -161,7 +161,7 @@ public class UploadProduct extends AppCompatActivity {
                 }
                 // After successfully adding the product, set the result to RESULT_OK
                 setResult(RESULT_OK);
-
+                dbHelper.deleteEmptyCategories();
                 // Finish the activity to return to the MainActivity
                 finish();
             }
@@ -205,7 +205,9 @@ public class UploadProduct extends AppCompatActivity {
         if (cursor.moveToFirst()) {
             do {
                 String categoryName = cursor.getString(cursor.getColumnIndex("categoryName"));
-                spinnerAdapter.add(categoryName);
+                if(!categoryName.equals("All")){
+                    spinnerAdapter.add(categoryName);
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();

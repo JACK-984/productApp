@@ -57,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         // displaying ID and role
         Bundle bundle = getIntent().getExtras();
         Toast.makeText(this, "userID " + bundle.getString("userID"), Toast.LENGTH_SHORT).show();
@@ -82,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         categoryRecyclerView.setAdapter(categoryAdapter);
         DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.deleteEmptyCategories();
+        dbHelper.addAllCategory();
         List<Category> categories = dbHelper.getCategories();
         categoryAdapter.loadCategoriesFromDatabase(categories);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

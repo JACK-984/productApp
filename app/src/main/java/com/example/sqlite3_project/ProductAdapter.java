@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
@@ -24,10 +25,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     public String getUserType(){
         return userType;
     }
+
+    public void filter(String searchText) {
+        searchText = searchText.toLowerCase(); // Normalize for case-insensitive search
+        List<Product> filteredList = new ArrayList<>();
+        for (Product product : productList) {
+            if (product.getName().toLowerCase().contains(searchText)) {
+                filteredList.add(product);
+            }
+        }
+        filterList(filteredList);
+    }
     public void filterList(List<Product> filteredList) {
         productList = filteredList;
         notifyDataSetChanged();
     }
+
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(userType.equals("admin")){

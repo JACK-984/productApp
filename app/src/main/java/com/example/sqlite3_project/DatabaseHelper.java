@@ -1,5 +1,6 @@
 package com.example.sqlite3_project;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     static final String DATABASE = "product.db";
-    static final int DB_VERSION = 5;
+    static final int DB_VERSION = 6;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE, null, DB_VERSION);
@@ -86,6 +87,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        Cursor cursor = db.rawQuery("SELECT * FROM products", null);
 //        logDataFromCursor(cursor);
 //    }
+    public void addAllCategory() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Check if "All" category already exists
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM categories WHERE categoryName = ?", new String[]{"All"});
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+
+        // If "All" category doesn't exist, insert it
+        if (count == 0) {
+            ContentValues values = new ContentValues();
+            values.put("categoryName", "All");
+            db.insert("categories", null, values);
+        }
+
+        db.close();
+    }
 
     // Method to log data from the 'categories' table
     public void logCategoryData() {
@@ -104,6 +123,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM admin", null);
         logDataFromCursor(cursor);
     }
+    public void deleteEmptyCategories() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            // Query to find categories with no associated products and not named "All"
+            String query = "DELETE FROM categories WHERE categoryID NOT IN (SELECT DISTINCT categoryID FROM products) AND categoryName <> 'All'";
+            db.execSQL(query);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error deleting empty categories: " + e.getMessage());
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
 
     // Helper method to log data from a cursor
     private void logDataFromCursor(Cursor cursor) {

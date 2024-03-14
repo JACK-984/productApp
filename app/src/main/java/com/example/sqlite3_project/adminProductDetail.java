@@ -166,7 +166,7 @@ public class adminProductDetail extends AppCompatActivity {
                 } else {
                     Toast.makeText(adminProductDetail.this, "Failed to update product", Toast.LENGTH_SHORT).show();
                 }
-
+                dbHelper.deleteEmptyCategories();
                 setResult(RESULT_OK);
                 finish();
             }

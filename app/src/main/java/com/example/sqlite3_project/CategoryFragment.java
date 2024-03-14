@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +72,7 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         adapter = new ProductAdapter(getContext(),productList, this,userType);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
+        TabLayout tabLayout = getActivity().findViewById(R.id.tabLayout);
         if (categoryName != null) {
             loadProductsForCategory(categoryName, adminID);
         }
@@ -98,7 +101,11 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
             cursor.close();
             db.close();
             adapter.notifyDataSetChanged();
-
+    }
+    public void filterProducts(String searchText) {
+        if (adapter != null) {
+            adapter.filter(searchText);
+        }
     }
     public void loadProductsForCategory(String categoryName, String adminID) {
         if (categoryName.equals("All")) {

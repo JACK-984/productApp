@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/refresh"
-        android:icon="@drawable/shopping_cart_black_24dp"
+        android:icon="@drawable/shopping_cart_24dp"
         app:showAsAction="ifRoom"
         android:title="Shopping Cart"
         android:visible="false"/>

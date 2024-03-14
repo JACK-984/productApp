@@ -16,7 +16,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     OnCategoryClickListener listener;
     public void refreshCategories(List<Category> newCategories) {
         categoryList.clear(); // Clear existing categories
-        categoryList.add(new Category(1000, "All")); // Add "All" category
         categoryList.addAll(newCategories); // Add new categories
         notifyDataSetChanged(); // Notify the adapter that the dataset has changed
     }
@@ -35,7 +34,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     }
     public void loadCategoriesFromDatabase(List<Category> categories) {
         categoryList.clear(); // Clear existing categories
-        categoryList.add(new Category(1000,"All"));
         categoryList.addAll(categories); // Add new categories
         notifyDataSetChanged(); // Notify the adapter that the dataset has changed
     }
