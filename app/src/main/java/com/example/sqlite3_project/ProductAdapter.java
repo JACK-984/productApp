@@ -60,7 +60,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
             @Override
             public void onClick(View view) {
                 if(listener!=null){
-                    listener.onProductClick(product);
+                    if(userType.equals("admin")){
+                        listener.onProductClick(product);
+                    }
+                    else if(userType.equals("customer")){
+                        listener.userClickProduct(product);
+                    }
                 }
             }
         });
@@ -78,6 +83,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     }
     public interface OnProductClickListener {
         void onProductClick(Product product);
+        void userClickProduct(Product product);
     }
 
     @Override

@@ -133,12 +133,10 @@ public class adminProductDetail extends AppCompatActivity {
                 String description = productDescriptionEditText.getText().toString();
                 String categoryName = categoryView.getText().toString();
                 String quantityStr = productQuantityEditText.getText().toString();
-
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(price) || TextUtils.isEmpty(description) || TextUtils.isEmpty(categoryName) || TextUtils.isEmpty(quantityStr)) {
                     Toast.makeText(adminProductDetail.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 int quantity = Integer.parseInt(quantityStr);
                 // Get the category ID corresponding to the selected category name
                 long categoryID = getCategoryID(categoryName);
@@ -152,7 +150,6 @@ public class adminProductDetail extends AppCompatActivity {
                         return;
                     }
                 }
-
                 // Convert the selected image to a byte array
                 byte[] imageData = null;
                 if (selectedImageUri != null) {
@@ -200,14 +197,11 @@ public class adminProductDetail extends AppCompatActivity {
         values.put("price", price);
         values.put("description", description);
         values.put("categoryID", categoryID);
-
         // Check if new image data is available
         if (imageData != null) {
             values.put("productImage", imageData); // Store image data instead of image URI
         }
-
         values.put("quantity", quantity);
-
         int rowsAffected = db.update("products", values, "productID = ?", new String[]{productID});
         db.close();
 

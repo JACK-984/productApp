@@ -173,7 +173,13 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         db.close();
         adapter.notifyDataSetChanged();
     }
-
+    public void userClickProduct(Product product) {
+        Bundle bundle = new Bundle();
+        bundle.putString("productID", product.getId());
+        Intent intent = new Intent(getContext(), ProductDetails.class);
+        intent.putExtras(bundle);
+        startActivity(intent); // Start activity
+    }
 
     @Override
     public void onProductClick(Product product) {

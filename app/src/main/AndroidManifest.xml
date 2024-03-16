@@ -24,6 +24,9 @@
         android:theme="@style/Theme.Sqlite3_project"
         tools:targetApi="33">
         <activity
+            android:name=".ProductDetails"
+            android:exported="false" />
+        <activity
             android:name=".userActivity"
             android:exported="false" />
         <activity
