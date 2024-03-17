@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar, menu);
         MenuItem menuItem = menu.findItem(R.id.searchIcon);
-        MenuItem refresh = menu.findItem(R.id.refresh);
+        MenuItem refresh = menu.findItem(R.id.cart);
 
         refresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override

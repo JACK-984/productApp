@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.sqlite3_project.cart.Cart;
 import com.example.sqlite3_project.category.Category;
 import com.example.sqlite3_project.category.CategoryAdapter;
 import com.example.sqlite3_project.category.CategoryFragment;
@@ -38,14 +39,16 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
     TabLayout tabLayout;
     ViewPager viewPager;
     CategoryAdapter categoryAdapter;
+    String userID;
+    String userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         Toast.makeText(this,"userID " + getIntent().getExtras().getString("userID"),Toast.LENGTH_SHORT).show();
         Toast.makeText(this,"userRole " + getIntent().getExtras().getString("userType"),Toast.LENGTH_SHORT).show();
-        String userID = getIntent().getExtras().getString("userID");
-        String userType =  getIntent().getExtras().getString("userType");
+        userID = getIntent().getExtras().getString("userID");
+        userType =  getIntent().getExtras().getString("userType");
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         toolbar = findViewById(R.id.topAppBar);
@@ -110,6 +113,21 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
                 }
             }
         });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.cart){
+                    Log.d("CartMenu", "Cart menu item clicked"); // Add logging statement
+                    Intent intent = new Intent(userActivity.this, Cart.class);
+                    startActivity(intent);
+                    return true;
+                }
+                if(item.getItemId() == R.id.searchIcon){
+
+                }
+                return false;
+            }
+        });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -126,20 +144,14 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
                 return true;
             }
         });
+
     }
     // METHODS
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_app_bar, menu);
+        getMenuInflater().inflate(R.menu.user_bar, menu);
         MenuItem menuItem = menu.findItem(R.id.searchIcon);
-        MenuItem refresh = menu.findItem(R.id.refresh);
-        refresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                // Call refreshProductList method of the categoryFragment
-                return true; // Return true to indicate that the event has been consumed
-            }
-        });
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("Type to Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

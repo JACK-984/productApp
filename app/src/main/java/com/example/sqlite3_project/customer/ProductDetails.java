@@ -48,7 +48,7 @@ private String productID;
         Cursor cursor = db.rawQuery("SELECT * FROM products WHERE productID = ?", new String[]{productID});
         if (cursor.moveToFirst()) {
             productName.setText(cursor.getString(cursor.getColumnIndex("productName")));
-            price.setText(String.valueOf(cursor.getDouble(cursor.getColumnIndex("price"))));
+            price.setText(String.valueOf(cursor.getDouble(cursor.getColumnIndex("price")) + " $"));
             description.setText(cursor.getString(cursor.getColumnIndex("description")));
             quantity.setText(String.valueOf(cursor.getInt(cursor.getColumnIndex("quantity"))));
             byte[] imageData = cursor.getBlob(cursor.getColumnIndex("productImage"));

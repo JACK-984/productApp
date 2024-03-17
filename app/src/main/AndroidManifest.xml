@@ -24,6 +24,9 @@
         android:theme="@style/Theme.Sqlite3_project"
         tools:targetApi="33">
         <activity
+            android:name=".cart.Cart"
+            android:exported="false" />
+        <activity
             android:name=".customer.ProductDetails"
             android:exported="false" />
         <activity
