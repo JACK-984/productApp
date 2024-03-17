@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.customer;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,8 +7,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,16 +17,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.sqlite3_project.category.Category;
+import com.example.sqlite3_project.category.CategoryAdapter;
+import com.example.sqlite3_project.category.CategoryFragment;
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.login_register.LoginActivity;
+import com.example.sqlite3_project.R;
+import com.example.sqlite3_project.product.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class userActivity extends AppCompatActivity implements CategoryAdapter.OnCategoryClickListener{
+public class userActivity extends AppCompatActivity implements CategoryAdapter.OnCategoryClickListener {
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     Toolbar toolbar;

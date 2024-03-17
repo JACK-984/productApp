@@ -24,25 +24,25 @@
         android:theme="@style/Theme.Sqlite3_project"
         tools:targetApi="33">
         <activity
-            android:name=".ProductDetails"
+            android:name=".customer.ProductDetails"
             android:exported="false" />
         <activity
-            android:name=".userActivity"
+            android:name=".customer.userActivity"
             android:exported="false" />
         <activity
-            android:name=".adminProductDetail"
+            android:name=".admin.adminProductDetail"
             android:exported="false" />
         <activity
-            android:name=".UploadProduct"
+            android:name=".admin.UploadProduct"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".admin.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".login_register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".login_register.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

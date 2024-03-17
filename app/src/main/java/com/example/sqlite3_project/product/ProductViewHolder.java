@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.product;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -6,12 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.example.sqlite3_project.R;
 
 public class ProductViewHolder extends RecyclerView.ViewHolder{
     ImageView productImageView;

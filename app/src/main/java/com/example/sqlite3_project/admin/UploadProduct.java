@@ -1,7 +1,5 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.admin;
 
-import androidx.annotation.ArrayRes;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,14 +12,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -31,14 +24,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.R;
 import com.google.android.material.textfield.TextInputEditText;
 
-import com.squareup.picasso.Picasso;
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 

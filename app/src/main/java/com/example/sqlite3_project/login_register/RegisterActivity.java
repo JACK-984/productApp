@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.login_register;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +13,8 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.R;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 

@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.category;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -19,6 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.product.Product;
+import com.example.sqlite3_project.product.ProductAdapter;
+import com.example.sqlite3_project.R;
+import com.example.sqlite3_project.admin.adminProductDetail;
+import com.example.sqlite3_project.customer.ProductDetails;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;

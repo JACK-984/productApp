@@ -1,15 +1,9 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.login_register;
 
-import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,8 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.R;
+import com.example.sqlite3_project.admin.MainActivity;
+import com.example.sqlite3_project.customer.userActivity;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 

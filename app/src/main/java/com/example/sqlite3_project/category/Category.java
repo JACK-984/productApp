@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.category;
 
 public class Category {
     private int id;

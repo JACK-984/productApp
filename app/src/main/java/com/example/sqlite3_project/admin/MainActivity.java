@@ -1,33 +1,33 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.admin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sqlite3_project.category.Category;
+import com.example.sqlite3_project.category.CategoryAdapter;
+import com.example.sqlite3_project.category.CategoryFragment;
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.login_register.LoginActivity;
+import com.example.sqlite3_project.product.Product;
+import com.example.sqlite3_project.product.ProductAdapter;
+import com.example.sqlite3_project.R;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;

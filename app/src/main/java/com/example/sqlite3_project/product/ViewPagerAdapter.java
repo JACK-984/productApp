@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.product;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

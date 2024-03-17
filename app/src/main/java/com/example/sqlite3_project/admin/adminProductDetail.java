@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.admin;
 
 
 import androidx.annotation.Nullable;
@@ -13,11 +13,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -32,16 +30,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import com.example.sqlite3_project.BitmapUtils;
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.R;
 
 public class adminProductDetail extends AppCompatActivity {
     ArrayAdapter<String> adapter;

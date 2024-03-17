@@ -1,4 +1,4 @@
-package com.example.sqlite3_project;
+package com.example.sqlite3_project.customer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentResolver;
@@ -10,6 +10,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.sqlite3_project.BitmapUtils;
+import com.example.sqlite3_project.DatabaseHelper;
+import com.example.sqlite3_project.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
