@@ -8,8 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sqlite3_project.BitmapUtils;
 import com.example.sqlite3_project.DatabaseHelper;
@@ -23,7 +26,10 @@ public class ProductDetails extends AppCompatActivity {
 TextView productName, price, description, categoryName, quantity;
 ImageView productImage;
 DatabaseHelper dbHelper;
+Button addToCart;
 private String productID;
+private String userID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +42,22 @@ private String productID;
         categoryName = findViewById(R.id.categoryName);
         productImage = findViewById(R.id.productImage);
         quantity = findViewById(R.id.productQuantity);
+        addToCart = findViewById(R.id.addToCart);
     // bundle
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             productID = bundle.getString("productID");
+            userID = bundle.getString("userID");
             loadProductDetails(productID);
         }
+//    add to cart button
+addToCart.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        dbHelper.addToCart(Integer.parseInt(userID),Integer.parseInt(productID),1);
+        Toast.makeText(view.getContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
+    }
+});
     }
     private void loadProductDetails(String productID) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -51,6 +67,13 @@ private String productID;
             price.setText(String.valueOf(cursor.getDouble(cursor.getColumnIndex("price")) + " $"));
             description.setText(cursor.getString(cursor.getColumnIndex("description")));
             quantity.setText(String.valueOf(cursor.getInt(cursor.getColumnIndex("quantity"))));
+            int categoryID = cursor.getInt(cursor.getColumnIndex("categoryID"));
+            Cursor categoryCursor = db.rawQuery("select categoryName from categories where categoryID = ?", new String[]{String.valueOf(categoryID)});
+            if (categoryCursor.moveToFirst()) {
+                // setting categoryName for the textView
+                String catName = categoryCursor.getString(categoryCursor.getColumnIndex("categoryName"));
+                categoryName.setText(catName);
+            }
             byte[] imageData = cursor.getBlob(cursor.getColumnIndex("productImage"));
             if (imageData != null) {
                 Bitmap bitmap = BitmapUtils.getImage(imageData);

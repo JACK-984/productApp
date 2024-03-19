@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.sqlite3_project.cart.Cart;
+import com.example.sqlite3_project.cart.CartActivity;
 import com.example.sqlite3_project.category.Category;
 import com.example.sqlite3_project.category.CategoryAdapter;
 import com.example.sqlite3_project.category.CategoryFragment;
@@ -72,7 +72,6 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
         }
 // Set up the ViewPager with the adapter
         viewPager.setAdapter(pagerAdapter);
-
 // Connect the TabLayout and ViewPager
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -118,7 +117,7 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
             public boolean onMenuItemClick(MenuItem item) {
                 if(item.getItemId() == R.id.cart){
                     Log.d("CartMenu", "Cart menu item clicked"); // Add logging statement
-                    Intent intent = new Intent(userActivity.this, Cart.class);
+                    Intent intent = new Intent(userActivity.this, CartActivity.class);
                     startActivity(intent);
                     return true;
                 }

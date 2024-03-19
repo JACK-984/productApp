@@ -7,14 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.sqlite3_project.cart.Cart;
 import com.example.sqlite3_project.category.Category;
+import com.example.sqlite3_project.product.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     static final String DATABASE = "product.db";
-    static final int DB_VERSION = 6;
+    static final int DB_VERSION = 7;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE, null, DB_VERSION);
@@ -48,7 +50,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // cart
         db.execSQL("CREATE TABLE IF NOT EXISTS cart (cartID INTEGER PRIMARY KEY AUTOINCREMENT, userID INTEGER, productID INTEGER, quantity INTEGER, FOREIGN KEY (userID) REFERENCES user(userID),FOREIGN KEY (productID) REFERENCES products(productID))");
     }
+    public Product getProductByID(String productID) {
+        Product product = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM products WHERE productID = ?", new String[]{productID});
+        if (cursor.moveToFirst()) {
+            // Retrieve product details from the cursor
+            String productName = cursor.getString(cursor.getColumnIndex("productName"));
+            String description = cursor.getString(cursor.getColumnIndex("description"));
+            byte[] image = cursor.getBlob(cursor.getColumnIndex("productImage"));
+            double price = cursor.getDouble(cursor.getColumnIndex("price"));
+            boolean inStock = cursor.getInt(cursor.getColumnIndex("inStock")) == 1;
+            int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            int categoryID = cursor.getInt(cursor.getColumnIndex("categoryID"));
+            String userID = cursor.getString(cursor.getColumnIndex("adminID"));
+            // Create a Product object
+            product = new Product(userID,description,image,productName,price,userID,categoryID,inStock,quantity);
+        }
+        cursor.close();
+        db.close();
+        return product;
+    }
+    public List<Cart> getCartItems() {
+        List<Cart> cartItems = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM cart", null);
+        if (cursor.moveToFirst()) {
+            do {
+                // Retrieve cart item details from the cursor
+                String cartID = cursor.getString(cursor.getColumnIndex("cartID"));
+                String userID = cursor.getString(cursor.getColumnIndex("userID"));
+                String productID = cursor.getString(cursor.getColumnIndex("productID"));
+                int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+                // Retrieve product details using getProductByID method
+                Product product = getProductByID(productID);
 
+                // Create a Cart object and add it to the list
+                if (product != null) {
+                    Cart cartItem = new Cart(cartID, userID, productID, quantity, product);
+                    cartItems.add(cartItem);
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return cartItems;
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //        db.execSQL("DROP TABLE IF EXISTS user");
@@ -90,7 +137,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return categories;
     }
-
+    public void logCartData(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from cart",null);
+        logDataFromCursor(cursor);
+    }
     // Method to log data from the 'user' table
     public void logUserData() {
         SQLiteDatabase db = getReadableDatabase();
@@ -102,6 +153,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete("products", "productID = ?", new String[]{productId});
         db.close();
     }
+    public void addToCart(int userId, int productId, int quantity) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("userID", userId);
+        values.put("productID", productId);
+        values.put("quantity", quantity);
+        db.insert("cart", null, values);
+        db.close();
+    }
+
     // Method to log data from the 'products' table
 //    public void logProductData() {
 //        SQLiteDatabase db = getReadableDatabase();

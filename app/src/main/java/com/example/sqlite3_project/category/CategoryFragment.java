@@ -35,7 +35,7 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
     private ProductAdapter adapter;
     private List<Product> productList;
     private String categoryName;
-    private String adminID;
+    private String userID;
     private DatabaseHelper dbHelper;
     private CategoryAdapter categoryAdapter;
 
@@ -44,11 +44,11 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
 
     static final int UPLOAD_PRODUCT_REQUEST_CODE = 1;
 
-    public static CategoryFragment newInstance(String categoryName, String adminID, CategoryAdapter categoryAdapter, String userType) {
+    public static CategoryFragment newInstance(String categoryName, String userID, CategoryAdapter categoryAdapter, String userType) {
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
         args.putString("categoryName", categoryName);
-        args.putString("adminID", adminID); // Add adminID to the arguments
+        args.putString("userID", userID); // Add adminID to the arguments
         args.putString("userType", userType);
         fragment.setArguments(args);
         fragment.setCategoryAdapter(categoryAdapter); // Set the category adapter
@@ -64,7 +64,7 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         dbHelper = new DatabaseHelper(requireContext());
         if (getArguments() != null) {
             categoryName = getArguments().getString("categoryName");
-            adminID = getArguments().getString("adminID"); // Retrieve adminID from arguments
+            userID = getArguments().getString("userID"); // Retrieve adminID from arguments
         }
     }
     @Nullable
@@ -74,12 +74,12 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         productList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.productList);
         String userType = getArguments().getString("userType");
-        adapter = new ProductAdapter(getContext(),productList, this,userType);
+        adapter = new ProductAdapter(getContext(),productList, this,userType,userID);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
         TabLayout tabLayout = getActivity().findViewById(R.id.tabLayout);
         if (categoryName != null) {
-            loadProductsForCategory(categoryName, adminID);
+            loadProductsForCategory(categoryName, userID);
         }
         return view;
     }
@@ -145,9 +145,9 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         productList.clear();
         // Reload products based on the category name
         if (categoryName.equals("All")) {
-            loadAllProducts(adminID); // Load all products
+            loadAllProducts(userID); // Load all products
         } else {
-            loadProductsForCategory(categoryName, adminID); // Load products for the specific category
+            loadProductsForCategory(categoryName, userID); // Load products for the specific category
         }
         // Notify the adapter that the data has changed
         adapter.notifyDataSetChanged();
@@ -181,6 +181,7 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
     public void userClickProduct(Product product) {
         Bundle bundle = new Bundle();
         bundle.putString("productID", product.getId());
+        bundle.putString("userID", userID);
         Intent intent = new Intent(getContext(), ProductDetails.class);
         intent.putExtras(bundle);
         startActivity(intent); // Start activity

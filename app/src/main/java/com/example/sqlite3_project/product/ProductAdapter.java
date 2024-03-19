@@ -19,16 +19,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     private OnProductClickListener listener;
     private Context context;
     private String userType;
-    public ProductAdapter(Context context,List<Product> productList, OnProductClickListener listener, String userType) {
+    private String userID;
+    private String productID;
+    public ProductAdapter(Context context,List<Product> productList, OnProductClickListener listener, String userType,String userID) {
         this.context = context;
         this.productList = productList;
         this.listener = listener;
         this.userType = userType;
+        this.userID = userID;
     }
     public String getUserType(){
         return userType;
     }
-
+    public String getProductID(int position){
+        Product product = productList.get(position);
+        this.productID = product.getId();
+        return productID;
+    }
+    public String getUserID(){return userID;}
     public void filter(String searchText) {
         searchText = searchText.toLowerCase(); // Normalize for case-insensitive search
         List<Product> filteredList = new ArrayList<>();

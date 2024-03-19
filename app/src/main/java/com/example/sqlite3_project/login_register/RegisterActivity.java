@@ -66,10 +66,11 @@ public class RegisterActivity extends AppCompatActivity {
                 registerUser();
             }
         });
-        dbHelper.logUserData();
-        dbHelper.logAdminData();
-        dbHelper.logCategoryData();
-        dbHelper.logProductData();
+//        dbHelper.logUserData();
+//        dbHelper.logAdminData();
+//        dbHelper.logCategoryData();
+//        dbHelper.logProductData();
+        dbHelper.logCartData();
     }
 
     private void registerUser() {

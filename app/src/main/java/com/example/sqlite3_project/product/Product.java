@@ -23,7 +23,9 @@ public class Product {
         this.inStock = inStock;
         this.quantity = quantity;
     }
-
+    public int getQuantity(){
+        return quantity;
+    }
     // Getters and setters
     public String getId() {
         return id;
