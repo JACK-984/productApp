@@ -12,11 +12,13 @@ import com.example.sqlite3_project.DatabaseHelper;
 import com.example.sqlite3_project.R;
 import com.example.sqlite3_project.product.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity implements CartViewHolder.OnItemAmountChangedListener{
+public class CartActivity extends AppCompatActivity implements CartViewHolder.OnItemAmountChangedListener, CartAdapter.OnItemDeleteListener{
     RecyclerView cartList;
     CartAdapter cartAdapter;
+    List<Cart> oldCartItems; // Add a reference to the old list
     List<Cart> cartItems;
     DatabaseHelper dbHelper;
     TextView totalAmount, itemCost;
@@ -34,6 +36,7 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
 
         // Get cart items from the database and set product details
         cartItems = dbHelper.getCartItems();
+        oldCartItems = new ArrayList<>(cartItems); // Save a copy of the initial list
         for (Cart cartItem : cartItems) {
             Product product = dbHelper.getProductByID(cartItem.getProductID());
             cartItem.setProduct(product);
@@ -41,14 +44,17 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
 
         // Set up RecyclerView with LinearLayoutManager and CartAdapter
         cartList.setLayoutManager(new LinearLayoutManager(this));
-        cartAdapter = new CartAdapter(cartItems);
+        cartAdapter = new CartAdapter(this,cartItems);
         cartAdapter.setOnItemAmountChangedListener(this); // Set listener
         cartList.setAdapter(cartAdapter);
-
+        // Set the listener for item amount change
+        cartAdapter.setOnItemAmountChangedListener(this);
+        cartAdapter = new CartAdapter(this, cartItems);
+        cartList.setAdapter(cartAdapter);
+        cartAdapter.setOnItemDeleteListener(this);
         // Calculate and display total amount
         calculateAndDisplayTotalAmount();
     }
-
     // Override method from OnItemAmountChangedListener interface
     @Override
     public void onItemAmountChanged(int position, int newAmount) {
@@ -59,14 +65,24 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
         // Update total amount
         calculateAndDisplayTotalAmount();
     }
-
     // Method to calculate and display total amount
     private void calculateAndDisplayTotalAmount() {
         double total = 0;
         for (Cart cartItem : cartItems) {
             total += cartItem.getProduct().getPrice() * cartItem.getQuantity();
         }
-        itemCost.setText(String.format("Total: $%.2f", total));
-        totalAmount.setText(String.format("Total: $%.2f", total));
+        itemCost.setText(String.format("Total: %.2f$", total));
+        totalAmount.setText(String.format("Total: $%.2f$", total));
+    }
+
+    // Implement the method for item deletion
+    @Override
+    public void onItemDelete(int position) {
+        // Remove the item from the list
+        cartItems.remove(position);
+        // Notify the adapter about the item removal
+        cartAdapter.notifyItemRemoved(position);
+        // Recalculate and display total amount
+        calculateAndDisplayTotalAmount();
     }
 }

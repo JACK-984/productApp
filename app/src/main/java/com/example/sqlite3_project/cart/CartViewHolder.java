@@ -19,9 +19,12 @@ import org.w3c.dom.Text;
 public class CartViewHolder extends RecyclerView.ViewHolder {
     ImageView productImage;
     TextView productName, price, itemAmount;
-    ImageView increase, decrease;
+    ImageView increase, decrease, deleteButton;
     int amount;
+    // Listener for item deletion
+    OnItemDeleteListener onItemDeleteListener;
     OnItemAmountChangedListener onItemAmountChangedListener; // Declare the listener
+
 
     public CartViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -31,7 +34,16 @@ public class CartViewHolder extends RecyclerView.ViewHolder {
         increase = itemView.findViewById(R.id.increase);
         decrease = itemView.findViewById(R.id.decrease);
         itemAmount = itemView.findViewById(R.id.itemAmount);
+        deleteButton = itemView.findViewById(R.id.deleteButton);
         amount = 1;
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemDeleteListener != null) {
+                    onItemDeleteListener.onItemDelete(getAdapterPosition());
+                }
+            }
+        });
     }
 
     public void bind(Product product) {
@@ -72,11 +84,20 @@ public class CartViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
+
     // Setter method for the listener
     public void setOnItemAmountChangedListener(OnItemAmountChangedListener listener) {
         this.onItemAmountChangedListener = listener;
     }
+    // Setter method for the listener
+    public void setOnItemDeleteListener(OnItemDeleteListener listener) {
+        this.onItemDeleteListener = listener;
+    }
 
+    // Interface for item deletion listener
+    public interface OnItemDeleteListener {
+        void onItemDelete(int position);
+    }
     // Interface for item amount change listener
     public interface OnItemAmountChangedListener {
         void onItemAmountChanged(int position, int newAmount);

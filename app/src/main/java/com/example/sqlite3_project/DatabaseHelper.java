@@ -148,11 +148,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM user", null);
         logDataFromCursor(cursor);
     }
+    // delete product from db
     public void deleteProduct(String productId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("products", "productID = ?", new String[]{productId});
         db.close();
     }
+    // add to cart
     public void addToCart(int userId, int productId, int quantity) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -205,6 +207,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM admin", null);
         logDataFromCursor(cursor);
     }
+    // Method to check if a cart item has been removed
+    public boolean isCartItemRemoved(String cartId) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM cart WHERE cartID = ?", new String[]{cartId});
+        boolean isRemoved = cursor.getCount() == 0;
+        cursor.close();
+        db.close();
+        return isRemoved;
+    }
+    // delete categories if there is no existing products under that category
     public void deleteEmptyCategories() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -220,7 +232,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
-
+    // delete cart item
+    public void deleteCartItem(String id){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("cart","cartID = ?",new String[]{id});
+    }
 
     // Helper method to log data from a cursor
     private void logDataFromCursor(Cursor cursor) {
