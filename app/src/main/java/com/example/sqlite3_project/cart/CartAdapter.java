@@ -14,12 +14,15 @@ import com.example.sqlite3_project.product.Product;
 
 import java.util.List;
 
-public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
+public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> implements CartViewHolder.OnItemAmountChangedListener{
     List<Cart> cartList;
     Context context;
     DatabaseHelper dbHelper;
     private OnItemDeleteListener onItemDeleteListener;
-
+    private OnItemAmountChangedListener onItemAmountChangedListener; // Add this listener
+    public void setOnItemAmountChangedListener(OnItemAmountChangedListener listener) {
+        this.onItemAmountChangedListener = listener;
+    }
     public void setOnItemDeleteListener(OnItemDeleteListener listener) {
         this.onItemDeleteListener = listener;
     }
@@ -28,8 +31,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
         this.context = context;
         dbHelper = new DatabaseHelper(context);
     }
-
-
     @NonNull
     @Override
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,8 +55,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
                 }
             }
         });
+        holder.setOnItemAmountChangedListener(this);
+    }
+    @Override
+    public void onItemAmountChanged(int position, int newAmount) {
+        if (onItemAmountChangedListener != null) {
+            onItemAmountChangedListener.onItemAmountChanged(position, newAmount);
+        }
     }
 
+    // Interface for item amount changed listener
+    public interface OnItemAmountChangedListener {
+        void onItemAmountChanged(int position, int newAmount);
+    }
 
     // Interface for item deletion listener
     public interface OnItemDeleteListener {

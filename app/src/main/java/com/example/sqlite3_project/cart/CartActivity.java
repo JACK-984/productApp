@@ -20,7 +20,7 @@ import com.example.sqlite3_project.product.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity implements CartViewHolder.OnItemAmountChangedListener, CartAdapter.OnItemDeleteListener{
+public class CartActivity extends AppCompatActivity implements CartAdapter.OnItemAmountChangedListener, CartAdapter.OnItemDeleteListener{
     RecyclerView cartList;
     CartAdapter cartAdapter;
     List<Cart> oldCartItems; // Add a reference to the old list
@@ -65,15 +65,15 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
 
         // Set up RecyclerView with LinearLayoutManager and CartAdapter
         cartList.setLayoutManager(new LinearLayoutManager(this));
-        cartAdapter = new CartAdapter(this,cartItems);
-        cartList.setAdapter(cartAdapter);
-        // Set the listener for item amount change
         cartAdapter = new CartAdapter(this, cartItems);
-        cartList.setAdapter(cartAdapter);
         cartAdapter.setOnItemDeleteListener(this);
+        cartAdapter.setOnItemAmountChangedListener(this);
+        cartList.setAdapter(cartAdapter);
+
         // Calculate and display total amount
         calculateAndDisplayTotalAmount();
     }
+
     // Override method from OnItemAmountChangedListener interface
     @Override
     public void onItemAmountChanged(int position, int newAmount) {
