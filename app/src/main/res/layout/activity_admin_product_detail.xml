@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:padding="24dp"
-            android:text="Upload Product"
+            android:text="Update Product"
             android:textAlignment="center"
             android:textSize="24dp"
             android:textStyle="bold" />

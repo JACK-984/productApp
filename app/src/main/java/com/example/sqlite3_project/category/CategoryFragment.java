@@ -28,6 +28,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class CategoryFragment extends Fragment implements ProductAdapter.OnProductClickListener {
@@ -73,14 +74,22 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         View view = inflater.inflate(R.layout.category_fragment, container, false);
         productList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.productList);
-        String userType = getArguments().getString("userType");
+        // Modified code to retrieve userType with null check
+        String userType = null;
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            userType = arguments.getString("userType");
+        }
         adapter = new ProductAdapter(getContext(),productList, this,userType,userID);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
         TabLayout tabLayout = getActivity().findViewById(R.id.tabLayout);
-        if (categoryName != null) {
-            loadProductsForCategory(categoryName, userID);
+        if (categoryName != null && userType.equals("customer")) {
+            loadProductsForCategoryUser(categoryName);
         }
+//        if (categoryName != null && userType.equals("customer")) {
+//            loadProductsForCategoryUser(categoryName, userID);
+//        }
         return view;
     }
     public void loadProductsForCategory(String categoryName) {
@@ -112,6 +121,34 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
             adapter.filter(searchText);
         }
     }
+    public void loadProductsForCategoryUser(String categoryName) {
+        if (categoryName.equals("All")) {
+            loadAllProducts();
+        } else {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM products WHERE categoryID = (SELECT categoryID FROM categories WHERE categoryName = ?)", new String[]{categoryName});
+            if (cursor.moveToFirst()) {
+                do {
+                    Product product = new Product(
+                            cursor.getString(cursor.getColumnIndex("productID")),
+                            cursor.getString(cursor.getColumnIndex("description")),
+                            cursor.getBlob(cursor.getColumnIndex("productImage")),
+                            cursor.getString(cursor.getColumnIndex("productName")),
+                            cursor.getDouble(cursor.getColumnIndex("price")),
+                            cursor.getString(cursor.getColumnIndex("adminID")),
+                            cursor.getInt(cursor.getColumnIndex("categoryID")),
+                            cursor.getInt(cursor.getColumnIndex("inStock")) == 1,
+                            cursor.getInt(cursor.getColumnIndex("quantity"))
+                    );
+                    productList.add(product);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     public void loadProductsForCategory(String categoryName, String adminID) {
         if (categoryName.equals("All")) {
             loadAllProducts(adminID);
@@ -154,6 +191,29 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
     }
     private void setProductList(Product product){
         productList.add(product);
+    }
+    private void loadAllProducts() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM products", null);
+        if (cursor.moveToFirst()) {
+            do {
+                Product product = new Product(
+                        cursor.getString(cursor.getColumnIndex("productID")),
+                        cursor.getString(cursor.getColumnIndex("description")),
+                        cursor.getBlob(cursor.getColumnIndex("productImage")),
+                        cursor.getString(cursor.getColumnIndex("productName")),
+                        cursor.getDouble(cursor.getColumnIndex("price")),
+                        cursor.getString(cursor.getColumnIndex("adminID")),
+                        cursor.getInt(cursor.getColumnIndex("categoryID")),
+                        cursor.getInt(cursor.getColumnIndex("inStock")) == 1,
+                        cursor.getInt(cursor.getColumnIndex("quantity"))
+                );
+                productList.add(product);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        adapter.notifyDataSetChanged();
     }
     private void loadAllProducts(String adminID) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();

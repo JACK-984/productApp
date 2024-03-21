@@ -275,8 +275,6 @@ public class UploadProduct extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Get the URI of the selected image
             selectedImageUri = data.getData();
-            // Save the image file to the internal storage
-//            saveImageToInternalStorage(selectedImageUri);
             // Display the selected image in your UI (optional)
             selectedImage.setImageURI(selectedImageUri);
         }

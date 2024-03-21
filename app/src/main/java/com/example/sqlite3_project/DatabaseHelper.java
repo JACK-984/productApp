@@ -71,15 +71,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return product;
     }
-    public List<Cart> getCartItems() {
+    public List<Cart> getCartItems(String userID) {
         List<Cart> cartItems = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM cart", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM cart where userID = ?", new String[]{userID});
         if (cursor.moveToFirst()) {
             do {
                 // Retrieve cart item details from the cursor
                 String cartID = cursor.getString(cursor.getColumnIndex("cartID"));
-                String userID = cursor.getString(cursor.getColumnIndex("userID"));
                 String productID = cursor.getString(cursor.getColumnIndex("productID"));
                 int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
                 // Retrieve product details using getProductByID method

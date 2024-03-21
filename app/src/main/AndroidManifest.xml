@@ -24,6 +24,12 @@
         android:theme="@style/Theme.Sqlite3_project"
         tools:targetApi="33">
         <activity
+            android:name=".customer.editUserProfile"
+            android:exported="false" />
+        <activity
+            android:name=".customer.user_profile"
+            android:exported="false" />
+        <activity
             android:name=".cart.CartActivity"
             android:exported="false" />
         <activity

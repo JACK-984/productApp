@@ -4,12 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sqlite3_project.DatabaseHelper;
 import com.example.sqlite3_project.R;
+import com.example.sqlite3_project.customer.userActivity;
+import com.example.sqlite3_project.customer.user_profile;
 import com.example.sqlite3_project.product.Product;
 
 import java.util.ArrayList;
@@ -22,20 +27,36 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
     List<Cart> cartItems;
     DatabaseHelper dbHelper;
     TextView totalAmount, itemCost;
-
+    Button backButton;
+    String userID;
+    String userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-
+        userID = getIntent().getExtras().getString("userID");
+        userType = getIntent().getExtras().getString("userType");
         // Initialize views and database helper
         cartList = findViewById(R.id.cartList);
         totalAmount = findViewById(R.id.totalAmount);
         itemCost = findViewById(R.id.itemAmountCost);
         dbHelper = new DatabaseHelper(this);
 
+        backButton = findViewById(R.id.backButton);
+        //backButton
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", userID);
+                bundle.putString("userType",userType);
+                Intent intent = new Intent(getApplicationContext(), userActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         // Get cart items from the database and set product details
-        cartItems = dbHelper.getCartItems();
+        cartItems = dbHelper.getCartItems(userID);
         oldCartItems = new ArrayList<>(cartItems); // Save a copy of the initial list
         for (Cart cartItem : cartItems) {
             Product product = dbHelper.getProductByID(cartItem.getProductID());
