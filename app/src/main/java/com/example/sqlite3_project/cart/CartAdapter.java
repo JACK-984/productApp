@@ -18,7 +18,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
     List<Cart> cartList;
     Context context;
     DatabaseHelper dbHelper;
-    private CartViewHolder.OnItemAmountChangedListener onItemAmountChangedListener;
     private OnItemDeleteListener onItemDeleteListener;
 
     public void setOnItemDeleteListener(OnItemDeleteListener listener) {
@@ -30,9 +29,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
         dbHelper = new DatabaseHelper(context);
     }
 
-    public void setOnItemAmountChangedListener(CartViewHolder.OnItemAmountChangedListener listener) {
-        this.onItemAmountChangedListener = listener;
-    }
 
     @NonNull
     @Override

@@ -66,10 +66,8 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
         // Set up RecyclerView with LinearLayoutManager and CartAdapter
         cartList.setLayoutManager(new LinearLayoutManager(this));
         cartAdapter = new CartAdapter(this,cartItems);
-        cartAdapter.setOnItemAmountChangedListener(this); // Set listener
         cartList.setAdapter(cartAdapter);
         // Set the listener for item amount change
-        cartAdapter.setOnItemAmountChangedListener(this);
         cartAdapter = new CartAdapter(this, cartItems);
         cartList.setAdapter(cartAdapter);
         cartAdapter.setOnItemDeleteListener(this);
@@ -88,13 +86,11 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
     }
     // Method to calculate and display total amount
     private void calculateAndDisplayTotalAmount() {
-        // price
         double total = 0;
         for (Cart cartItem : cartItems) {
             total += cartItem.getProduct().getPrice() * cartItem.getQuantity();
         }
         itemCost.setText(String.format("Total: %.2f$", total));
-        // final price
         totalAmount.setText(String.format("Total: $%.2f$", total));
     }
 
