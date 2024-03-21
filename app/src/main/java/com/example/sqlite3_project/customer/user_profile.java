@@ -24,7 +24,7 @@ public class user_profile extends AppCompatActivity {
 Button editButton, backButton;
 TextView username, phone,email,password;
 ShapeableImageView userImage;
-String userID;
+String userID, userType;
 DatabaseHelper dbHelper;
 ImageView passwordToggle;
     @Override
@@ -47,7 +47,7 @@ ImageView passwordToggle;
 
         editButton = findViewById(R.id.editButton);
         userID = getIntent().getExtras().getString("userID");
-
+        userType = getIntent().getExtras().getString("userType");
         backButton = findViewById(R.id.backButton);
         //backButton
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +55,9 @@ ImageView passwordToggle;
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("userID", userID);
-                Intent intent = new Intent(getApplicationContext(), userActivity.class);
+                bundle.putString("userType", userType);
+
+                Intent intent = new Intent(user_profile.this, userActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

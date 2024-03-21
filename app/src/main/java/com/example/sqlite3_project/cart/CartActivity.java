@@ -88,11 +88,13 @@ public class CartActivity extends AppCompatActivity implements CartViewHolder.On
     }
     // Method to calculate and display total amount
     private void calculateAndDisplayTotalAmount() {
+        // price
         double total = 0;
         for (Cart cartItem : cartItems) {
             total += cartItem.getProduct().getPrice() * cartItem.getQuantity();
         }
         itemCost.setText(String.format("Total: %.2f$", total));
+        // final price
         totalAmount.setText(String.format("Total: $%.2f$", total));
     }
 

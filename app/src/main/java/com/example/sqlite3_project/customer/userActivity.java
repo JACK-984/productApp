@@ -168,6 +168,7 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
                 else if (id == R.id.viewProfile) {
                     Bundle bundle = new Bundle();
                     bundle.putString("userID", userID);
+                    bundle.putString("userType",userType);
                     Intent intent = new Intent(userActivity.this, user_profile.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
