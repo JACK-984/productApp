@@ -87,34 +87,10 @@ public class CategoryFragment extends Fragment implements ProductAdapter.OnProdu
         if (categoryName != null && userType.equals("customer")) {
             loadProductsForCategoryUser(categoryName);
         }
-//        if (categoryName != null && userType.equals("customer")) {
-//            loadProductsForCategoryUser(categoryName, userID);
-//        }
+        if (categoryName != null && userType.equals("admin")) {
+            loadProductsForCategory(categoryName, userID);
+        }
         return view;
-    }
-    public void loadProductsForCategory(String categoryName) {
-
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM products WHERE categoryID = (SELECT categoryID FROM categories WHERE categoryName = ?)", new String[]{categoryName});
-            if (cursor.moveToFirst()) {
-                do {
-                    Product product = new Product(
-                            cursor.getString(cursor.getColumnIndex("productID")),
-                            cursor.getString(cursor.getColumnIndex("description")),
-                            cursor.getBlob(cursor.getColumnIndex("productImage")),
-                            cursor.getString(cursor.getColumnIndex("productName")),
-                            cursor.getDouble(cursor.getColumnIndex("price")),
-                            cursor.getString(cursor.getColumnIndex("adminID")),
-                            cursor.getInt(cursor.getColumnIndex("categoryID")),
-                            cursor.getInt(cursor.getColumnIndex("inStock")) == 1,
-                            cursor.getInt(cursor.getColumnIndex("quantity"))
-                    );
-                    productList.add(product);
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-            db.close();
-            adapter.notifyDataSetChanged();
     }
     public void filterProducts(String searchText) {
         if (adapter != null) {
