@@ -110,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (isAdmin) {
                 // Insert user data into the admin table
                 newRowId = db.insert("admin", null, values);
+
             } else {
                 // Insert user data into the user table
                 newRowId = db.insert("user", null, values);
@@ -118,6 +119,8 @@ public class RegisterActivity extends AppCompatActivity {
             // Check if the insertion was successful
             if (newRowId != -1) {
                 Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish(); // Finish the current activity to prevent going back to it by pressing back button
             } else {
                 Toast.makeText(RegisterActivity.this, "Failed to register user", Toast.LENGTH_SHORT).show();
             }
