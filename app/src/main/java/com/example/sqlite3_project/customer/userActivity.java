@@ -74,6 +74,7 @@ public class userActivity extends AppCompatActivity implements CategoryAdapter.O
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         List<Category> categories = dbHelper.getCategories();
 
+
         // Create a ViewPager
         ViewPager viewPager = findViewById(R.id.viewPager);
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 1);

@@ -55,6 +55,21 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnIte
                 startActivity(intent);
             }
         });
+
+        // Proceed button
+        Button proceedButton = findViewById(R.id.checkOutBtn);
+        proceedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start PaymentSuccessActivity
+                Intent intent = new Intent(CartActivity.this, PaymentSuccessActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
         // Get cart items from the database and set product details
         cartItems = dbHelper.getCartItems(userID);
         oldCartItems = new ArrayList<>(cartItems); // Save a copy of the initial list
