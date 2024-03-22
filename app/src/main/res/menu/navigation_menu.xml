@@ -9,6 +9,9 @@
             android:id="@+id/manageProduct"
             android:title="Manage Product" />
         <item
+            android:id="@+id/viewUsers"
+            android:title="View Users" />
+        <item
             android:id="@+id/uploadProduct"
             android:title="Upload Product" />
         <item

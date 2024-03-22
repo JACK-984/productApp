@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.sqlite3_project.admin.User;
 import com.example.sqlite3_project.cart.Cart;
 import com.example.sqlite3_project.category.Category;
 import com.example.sqlite3_project.product.Product;
@@ -50,6 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // cart
         db.execSQL("CREATE TABLE IF NOT EXISTS cart (cartID INTEGER PRIMARY KEY AUTOINCREMENT, userID INTEGER, productID INTEGER, quantity INTEGER, FOREIGN KEY (userID) REFERENCES user(userID),FOREIGN KEY (productID) REFERENCES products(productID))");
     }
+
     public Product getProductByID(String productID) {
         Product product = null;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -65,12 +67,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int categoryID = cursor.getInt(cursor.getColumnIndex("categoryID"));
             String userID = cursor.getString(cursor.getColumnIndex("adminID"));
             // Create a Product object
-            product = new Product(userID,description,image,productName,price,userID,categoryID,inStock,quantity);
+            product = new Product(userID, description, image, productName, price, userID, categoryID, inStock, quantity);
         }
         cursor.close();
         db.close();
         return product;
     }
+    // clear cart items after purchasing
+    public void clearCart(String userID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("cart","userID = ?",new String[]{userID});
+        db.close();
+    }
+    // fetch cart items
     public List<Cart> getCartItems(String userID) {
         List<Cart> cartItems = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -95,6 +104,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return cartItems;
     }
+
+    // getUsers
+    public List<User> getUsers() {
+        List<User> users = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from user", null);
+        if (cursor.moveToFirst()) {
+            do {
+                String userID = cursor.getString(cursor.getColumnIndex("userID"));
+                String username = cursor.getString(cursor.getColumnIndex("username"));
+                String email = cursor.getString(cursor.getColumnIndex("email"));
+                String password = cursor.getString(cursor.getColumnIndex("password"));
+                int phone = cursor.getInt(cursor.getColumnIndex("phone"));
+                byte[] userImage = cursor.getBlob(cursor.getColumnIndex("userImage"));
+                User user = new User(userID, username, email, phone, password, userImage);
+                users.add(user);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        // Logging the number of users fetched
+        Log.d("UserAdapter", "Number of users fetched: " + users.size());
+
+        return users;
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //        db.execSQL("DROP TABLE IF EXISTS user");
@@ -102,6 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        db.execSQL("DROP TABLE IF EXISTS categories");
         onCreate(db);
     }
+
     public List<Category> getCategories() {
         List<Category> categories = new ArrayList<>();
 
@@ -136,23 +173,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return categories;
     }
-    public void logCartData(){
+
+    public void logCartData() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from cart",null);
+        Cursor cursor = db.rawQuery("select * from cart", null);
         logDataFromCursor(cursor);
     }
+
     // Method to log data from the 'user' table
     public void logUserData() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM user", null);
         logDataFromCursor(cursor);
     }
+
     // delete product from db
     public void deleteProduct(String productId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("products", "productID = ?", new String[]{productId});
         db.close();
     }
+
     // add to cart
     public void addToCart(int userId, int productId, int quantity) {
         SQLiteDatabase db = getWritableDatabase();
@@ -195,17 +236,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM categories", null);
         logDataFromCursor(cursor);
     }
+
     public void logProductData() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT productID, productName, description, price, categoryID,inStock,quantity FROM products", null);
         logDataFromCursor(cursor);
     }
+
     // Method to log data from the 'admin' table
     public void logAdminData() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM admin", null);
         logDataFromCursor(cursor);
     }
+
     // Method to check if a cart item has been removed
     public boolean isCartItemRemoved(String cartId) {
         SQLiteDatabase db = getReadableDatabase();
@@ -215,6 +259,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return isRemoved;
     }
+
     // delete categories if there is no existing products under that category
     public void deleteEmptyCategories() {
         SQLiteDatabase db = getWritableDatabase();
@@ -231,10 +276,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
     // delete cart item
-    public void deleteCartItem(String id){
+    public void deleteCartItem(String id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete("cart","cartID = ?",new String[]{id});
+        db.delete("cart", "cartID = ?", new String[]{id});
     }
 
     // Helper method to log data from a cursor

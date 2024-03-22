@@ -62,7 +62,11 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnIte
             @Override
             public void onClick(View v) {
                 // Start PaymentSuccessActivity
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", userID);
+                bundle.putString("userType",userType);
                 Intent intent = new Intent(CartActivity.this, PaymentSuccessActivity.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

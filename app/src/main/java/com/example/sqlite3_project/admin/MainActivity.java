@@ -106,12 +106,20 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
                     finish();
                     closeDrawer = false;
                 }
-                if (id == R.id.uploadProduct) {
+                else if (id == R.id.uploadProduct) {
                     Intent intent = new Intent(MainActivity.this, UploadProduct.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("userID", userID);
                     intent.putExtras(bundle);
                     startActivityForResult(intent, UPLOAD_PRODUCT_REQUEST_CODE); // Start activity for result
+                    closeDrawer = true;
+                }
+                else if (id == R.id.viewUsers){
+                    Intent intent = new Intent(MainActivity.this, ManageUser.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userID", userID);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                     closeDrawer = true;
                 }
                 if (closeDrawer) {

@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sqlite3_project.DatabaseHelper;
 import com.example.sqlite3_project.R;
 import com.example.sqlite3_project.customer.userActivity;
 import com.example.sqlite3_project.login_register.LoginActivity;
@@ -15,12 +16,12 @@ public class PaymentSuccessActivity extends AppCompatActivity {
 
     private String userID;
     private String userType;
-
+    DatabaseHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_success);
-
+        dbHelper = new DatabaseHelper(this);
         // Retrieve userID and userType from the intent that started this activity
         userID = getIntent().getStringExtra("userID");
         userType = getIntent().getStringExtra("userType");
@@ -28,6 +29,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
 
         Button continueShoppingButton = findViewById(R.id.continueShoppingButton);
         continueShoppingButton.setOnClickListener(v -> {
+            dbHelper.clearCart(userID);
             // Start userActivity with userID and userType extras
             Intent userIntent = new Intent(PaymentSuccessActivity.this, userActivity.class);
             Bundle bundle = new Bundle();
