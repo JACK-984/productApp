@@ -24,7 +24,6 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
-    ImageView test;
     TextView signUp;
     Button submitBtn;
     MaterialSwitch switchBtn;

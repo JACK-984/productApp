@@ -18,10 +18,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
     List<User> users;
     Context context;
     DatabaseHelper dbHelper;
+    private OnItemClickListener listener;
 
-    public UserAdapter(Context context, List<User> users){
+    // Interface for item click callback
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    public UserAdapter(Context context, List<User> users, OnItemClickListener listener){
         this.context = context;
         this.users = users;
+        this.listener = listener;
         dbHelper = new DatabaseHelper(context);
     }
 
@@ -29,7 +35,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_list_layout, parent, false);
-        return new UserViewHolder(view);
+
+        return new UserViewHolder(view, listener);
     }
 
     @Override

@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
                     Intent intent = new Intent(MainActivity.this, ManageUser.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("userID", userID);
+                    bundle.putString("userType",userType);
                     intent.putExtras(bundle);
                     startActivity(intent);
                     closeDrawer = true;

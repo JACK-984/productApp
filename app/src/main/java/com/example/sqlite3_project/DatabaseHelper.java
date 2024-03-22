@@ -29,25 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS products (productID INTEGER PRIMARY KEY AUTOINCREMENT, productName TEXT, price REAL,inStock BOOLEAN,quantity INTEGER, description TEXT, categoryID INTEGER, adminID INTEGER,productImage BLOB, FOREIGN KEY (adminID) REFERENCES admin(adminID), FOREIGN KEY (categoryID) REFERENCES categories(categoryID))");
         db.execSQL("CREATE TABLE IF NOT EXISTS categories (categoryID INTEGER PRIMARY KEY AUTOINCREMENT, categoryName TEXT)");
         db.execSQL("CREATE TABLE IF NOT EXISTS admin (adminID INTEGER PRIMARY KEY AUTOINCREMENT, admin_username TEXT, admin_email TEXT, admin_pw TEXT)");
-        // pay
-        db.execSQL("CREATE TABLE IF NOT EXISTS pay (\n" +
-                "    paymentID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    adminID INTEGER,\n" +
-                "    amount REAL,\n" +
-                "    paymentDate DATE,\n" +
-                "    FOREIGN KEY (adminID) REFERENCES admin(adminID)\n" +
-                ");");
-        // order
-        db.execSQL("CREATE TABLE IF NOT EXISTS orders (\n" +
-                "    orderID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    userID INTEGER,\n" +
-                "    productID INTEGER,\n" +
-                "    quantity INTEGER,\n" +
-                "    orderDate DATE,\n" +
-                "    totalAmount REAL,\n" +
-                "    FOREIGN KEY (userID) REFERENCES user(userID),\n" +
-                "    FOREIGN KEY (productID) REFERENCES products(productID)\n" +
-                ");\n");
         // cart
         db.execSQL("CREATE TABLE IF NOT EXISTS cart (cartID INTEGER PRIMARY KEY AUTOINCREMENT, userID INTEGER, productID INTEGER, quantity INTEGER, FOREIGN KEY (userID) REFERENCES user(userID),FOREIGN KEY (productID) REFERENCES products(productID))");
     }

@@ -18,20 +18,21 @@ import android.widget.TextView;
 import com.example.sqlite3_project.BitmapUtils;
 import com.example.sqlite3_project.DatabaseHelper;
 import com.example.sqlite3_project.R;
+import com.example.sqlite3_project.admin.ManageUser;
 import com.google.android.material.imageview.ShapeableImageView;
 
 public class user_profile extends AppCompatActivity {
 Button editButton, backButton;
-TextView username, phone,email,password;
+TextView username, phone, email, password;
 ShapeableImageView userImage;
 String userID, userType;
 DatabaseHelper dbHelper;
 ImageView passwordToggle;
+boolean fromAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-
         dbHelper = new DatabaseHelper(this);
         username = findViewById(R.id.username);
         phone = findViewById(R.id.phone);
@@ -45,6 +46,8 @@ ImageView passwordToggle;
         password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         passwordToggle.setImageResource(R.drawable.eye_on);
 
+        fromAdmin = getIntent().getExtras().getBoolean("fromAdmin");
+
         editButton = findViewById(R.id.editButton);
         userID = getIntent().getExtras().getString("userID");
         userType = getIntent().getExtras().getString("userType");
@@ -53,13 +56,22 @@ ImageView passwordToggle;
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("userID", userID);
-                bundle.putString("userType", userType);
-
-                Intent intent = new Intent(user_profile.this, userActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if(!fromAdmin){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userID", userID);
+                    userType = "customer";
+                    bundle.putString("userType", userType);
+                    Intent intent = new Intent(user_profile.this, userActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userID", userID);
+                    bundle.putString("userType", userType);
+                    Intent intent = new Intent(user_profile.this, ManageUser.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -69,11 +81,22 @@ ImageView passwordToggle;
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("userID",userID);
-                Intent intent = new Intent(user_profile.this, editUserProfile.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if(!fromAdmin){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userID",userID);
+                    Intent intent = new Intent(user_profile.this, editUserProfile.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                else{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userID",userID);
+                    fromAdmin = true;
+                    bundle.putBoolean("fromAdmin",fromAdmin);
+                    Intent intent = new Intent(user_profile.this, editUserProfile.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -93,13 +116,11 @@ ImageView passwordToggle;
                     password.setInputType(InputType.TYPE_CLASS_TEXT);
                     password.setTransformationMethod(null);
                     passwordToggle.setImageResource(R.drawable.eye_off);
-
                 }
                 // Toggle the visibility state
                 isPasswordVisible = !isPasswordVisible;
             }
         });
-
     }
     public void loadUserDetails(String userID) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();

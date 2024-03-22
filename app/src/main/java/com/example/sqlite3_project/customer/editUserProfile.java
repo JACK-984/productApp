@@ -41,6 +41,7 @@ public class editUserProfile extends AppCompatActivity {
     Uri selectedImageUri;
     DatabaseHelper dbHelper;
     ImageView passwordToggle;
+    boolean fromAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +59,25 @@ public class editUserProfile extends AppCompatActivity {
         password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         passwordToggle.setImageResource(R.drawable.eye_on);
         backButton = findViewById(R.id.backButton);
+        fromAdmin = getIntent().getExtras().getBoolean("fromAdmin");
         //backButton
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("userID", userID);
-                Intent intent = new Intent(getApplicationContext(), user_profile.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if(!fromAdmin){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userID", userID);
+                    Intent intent = new Intent(getApplicationContext(), user_profile.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userID", userID);
+                    bundle.putBoolean("fromAdmin",fromAdmin);
+                    Intent intent = new Intent(getApplicationContext(), user_profile.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
         // password toggle
@@ -85,7 +96,6 @@ public class editUserProfile extends AppCompatActivity {
                     password.setInputType(InputType.TYPE_CLASS_TEXT);
                     password.setTransformationMethod(null);
                     passwordToggle.setImageResource(R.drawable.eye_off);
-
                 }
                 // Toggle the visibility state
                 isPasswordVisible = !isPasswordVisible;
